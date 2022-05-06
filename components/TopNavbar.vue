@@ -1,31 +1,33 @@
 <template>
   <nav class="nav">
-    <div class="nav__logo-wrap">
-      <nuxt-link
-        to="/"
-        tag="img"
-        class="nav__logo"
-        src="https://api.quwi.com/images/logo_150.png"
-      />
-    </div>
-    <ul class="nav__links nav-link-list">
-      <nuxt-link class="nav-link-list__item" tag="li" to="/"
+    <div class="nav__inner">
+      <div class="nav__logo-wrap">
+        <nuxt-link
+          to="/"
+          tag="img"
+          class="nav__logo"
+          :src="require('~/assets/images/logo.png')"
+        />
+      </div>
+      <ul class="nav__links nav-link-list">
+        <nuxt-link class="nav-link-list__item" tag="li" to="/"
         >Projects</nuxt-link
-      >
-      <nuxt-link
-        v-if="!isAuthenticated"
-        class="nav-link-list__item"
-        to="/auth/login"
+        >
+        <nuxt-link
+          v-if="!isAuthenticated"
+          class="nav-link-list__item"
+          to="/auth/login"
         >Login</nuxt-link
-      >
-      <a
-        v-if="isAuthenticated"
-        class="nav-link-list__item"
-        to="/auth/login"
-        @click.prevent="handleClickLogout"
+        >
+        <a
+          v-if="isAuthenticated"
+          class="nav-link-list__item"
+          to="/auth/login"
+          @click.prevent="handleClickLogout"
         >Logout</a
-      >
-    </ul>
+        >
+      </ul>
+    </div>
   </nav>
 </template>
 <script>
@@ -56,12 +58,23 @@ export default {
 .nav {
   display: flex;
   align-items: center;
-  height: 42px;
-  padding: 6px 48px;
-  background-color: #5d5d5a;
+  position: sticky;
+  background: #fafafa;
+  box-shadow: 0 0 5px rgb(0 0 0 / 25%);
+  height: 46px;
+  top: 0;
+  width: 100%;
+  z-index: 1001;
+
+  &__inner {
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    width: 100%;
+  }
 
   &__logo {
-    width: 40px;
+    width: 25px;
   }
 
   &__links {

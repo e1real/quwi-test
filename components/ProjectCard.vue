@@ -82,6 +82,8 @@ export default {
 
   &__value {
     font-weight: bold;
+    flex-grow: 1;
+    text-align: right;
   }
 }
 

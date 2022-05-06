@@ -1,34 +1,39 @@
 <template>
   <div class="page login-page">
     <ValidationObserver v-slot="{ invalid }">
-      <Form class="auth-form" @submit.prevent="submit">
-        <img
-          class="auth-form__app-logo"
-          src="https://api.quwi.com/images/logo_150.png"
-        />
-        <ValidationProvider v-slot="{ errors }" name="email" rules="required|email">
-          <input
+      <form class="auth-form" @submit.prevent="submit">
+        <div class="auth-form__app">
+          <img
+            class="auth-form__app-logo"
+            src="https://api.quwi.com/images/logo_150.png"
+          />
+          <span class="auth-form__app-name">
+            QUWI
+          </span>
+        </div>
+        <ValidationProvider v-slot="{ errors }" class="input-wrapper" name="email" rules="required|email">
+          <BaseInput
             v-model="form.email"
-            :class="['form-input', {'form-input--error': errors.length }, 'auth-form__login']"
-            placeholder="email"
+            :class="['form-input', 'auth-form__login']"
+            :errors="errors"
+            placeholder="Email"
             type="text"
           />
         </ValidationProvider>
-        <ValidationProvider  v-slot="{ errors }" name="password" rules="required|min:6">
-          <input
+        <ValidationProvider v-slot="{ errors }"  class="input-wrapper" name="password" rules="required|min:6">
+          <BaseInput
             v-model="form.password"
-            :class="['form-input', {'form-input--error': errors.length }, 'auth-form__password']"
-            placeholder="password"
-            type="password"
+            :class="['form-input', 'auth-form__password']"
+            :errors="errors"
+            placeholder="Password"
+            native-type="password"
           />
         </ValidationProvider>
-        <button class="auth-form__submit-btn" type="submit" :disabled="invalid || formPending">
-          Login
-        </button>
+        <BaseButton :loading="formPending" label="Login" class="auth-form__submit-btn" type="submit" :disabled="invalid || formPending" />
         <nuxt-link class="auth-form__forgot-btn" to="/auth/forgot">
           Forgot password?
         </nuxt-link>
-      </Form>
+      </form>
     </ValidationObserver>
   </div>
 </template>
@@ -78,24 +83,39 @@ export default {
 
 <style lang="scss" scoped>
 .login-page {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  margin: auto;
+  text-align: center;
 }
 
 .auth-form {
   display: flex;
   flex-direction: column;
-  padding: 64px 32px 32px;
-  background-color: #5d5d5a;
-  -webkit-box-shadow: 1px 4px 22px 0px rgba(34, 60, 80, 0.2);
-  -moz-box-shadow: 1px 4px 22px 0px rgba(34, 60, 80, 0.2);
-  box-shadow: 1px 4px 22px 0px rgba(34, 60, 80, 0.2);
+  align-items: center;
+  padding: 25px 40px 35px;
+  background: #fff;
+  border: 1px solid rgba(0,0,0,.11);
+  box-shadow: 0 0 12px rgb(0 0 0 / 25%);
+  border-radius: 15px;
+  width: 440px;
+  text-align: center;
+
+  &__app {
+    display: flex;
+    align-items: center;
+    align-self: center;
+    margin-bottom: 26px;
+  }
 
   &__app-logo {
-    align-self: center;
-    width: 80px;
-    margin-bottom: 16px;
+    width: 40px;
+    margin-right: 14px;
+  }
+
+  &__app-name {
+    font-family: Arial,sans-serif;
+    font-weight: 700;
+    font-size: 24px;
+    text-transform: uppercase;
   }
 
   &__password {
@@ -108,11 +128,7 @@ export default {
   }
 }
 
-.form-input {
-  padding: 6px 12px;
-
-  &--error {
-    border: 1px solid red;
-  }
+.input-wrapper {
+  width: 100%;
 }
 </style>

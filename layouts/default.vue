@@ -14,5 +14,6 @@ export default {
   display: grid;
   height: 100vh;
   grid-template-rows: auto 1fr;
+  background: url('~assets/images/gray_blur.png');
 }
 </style>
