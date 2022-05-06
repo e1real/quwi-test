@@ -21,7 +21,9 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    '~/plugins/vee-validate.js'
+    '~/plugins/client-init',
+    '~/plugins/axios',
+    '~/plugins/vee-validate',
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
