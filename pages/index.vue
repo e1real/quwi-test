@@ -10,9 +10,6 @@
         @click.native="$router.push('/project/' + project.id)"
       />
     </ul>
-    <div v-if="projectListPending">
-      Pending...
-    </div>
     <NuxtChild  @updated="afterUpdateProject"/>
   </div>
 </template>
@@ -20,33 +17,24 @@
 export default {
   name: 'HomePage',
   middleware: 'user',
+  async asyncData ({ $axios }) {
+    try {
+      const { data } = await $axios.get(
+        'projects-manage/index?filters[is_active]=1&sort=dta_create'
+      )
+      return {
+        projectList: data.projects
+      }
+    } catch (err) {
+      console.error(err)
+    }
+  },
   data() {
     return {
       projectList: [],
-      projectListPending: false,
     }
   },
-  mounted() {
-    this.fetchProjectList()
-  },
   methods: {
-    /**
-     * Fetch project list
-     * @returns {Promise<void>}
-     */
-    async fetchProjectList() {
-      try {
-        this.projectListPending = true
-        const { data } = await this.$axios.get(
-          'projects-manage/index?filters[is_active]=1&sort=dta_create'
-        )
-        this.projectList = data.projects
-      } catch (err) {
-        window.console.error(err)
-      } finally {
-        this.projectListPending = false
-      }
-    },
     /**
      * Update project completed
      * @param {Object} newProject
