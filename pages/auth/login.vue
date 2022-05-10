@@ -1,6 +1,6 @@
 <template>
   <div class="page login-page">
-    <ValidationObserver v-slot="{ invalid }">
+    <ValidationObserver v-slot="{ invalid }" ref="login-form">
       <form class="auth-form" @submit.prevent="submit">
         <div class="auth-form__app">
           <img
@@ -11,23 +11,25 @@
             QUWI
           </span>
         </div>
-        <ValidationProvider v-slot="{ errors }" class="input-wrapper" name="email" rules="required|email">
+        <ValidationProvider v-slot="{ errors }" class="input-wrapper auth-form__login" name="email" rules="required|email">
           <BaseInput
             v-model="form.email"
-            :class="['form-input', 'auth-form__login']"
+            class="form-input"
             :errors="errors"
             placeholder="Email"
             type="text"
           />
+          <span class="input-error">{{ errors [0] }}</span>
         </ValidationProvider>
-        <ValidationProvider v-slot="{ errors }"  class="input-wrapper" name="password" rules="required|min:6">
+        <ValidationProvider v-slot="{ errors }"  class="input-wrapper auth-form__password" name="password" rules="required|min:6">
           <BaseInput
             v-model="form.password"
-            :class="['form-input', 'auth-form__password']"
+            class="form-input"
             :errors="errors"
             placeholder="Password"
             native-type="password"
           />
+          <span class="input-error">{{ errors [0] }}</span>
         </ValidationProvider>
         <BaseButton :loading="formPending" label="Login" class="auth-form__submit-btn" type="submit" :disabled="invalid || formPending" />
         <nuxt-link class="auth-form__forgot-btn" to="/auth/forgot">
@@ -71,8 +73,9 @@ export default {
 
         this.$router.push('/')
       } catch (err) {
-        // eslint-disable-next-line no-console
-        console.error(err)
+        if (err.response.status === 417) {
+          this.$refs['login-form'].setErrors({ email: ['Incorrect email or password.'] })
+        }
       } finally {
         this.formPending = false
       }
@@ -130,5 +133,13 @@ export default {
 
 .input-wrapper {
   width: 100%;
+}
+
+.input-error {
+  display: flex;
+  font-size: 14px;
+  color: rgb(126, 26, 26);
+  align-self: flex-start;
+  margin-top: 6px;
 }
 </style>
